@@ -1,0 +1,93 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to get user role
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return isAuthenticated() && getUserRole() == 'admin';
+    }
+    
+    // Helper function to check if user is driver
+    function isDriver() {
+      return isAuthenticated() && getUserRole() == 'driver';
+    }
+    
+    // Helper function to check if user is seller
+    function isSeller() {
+      return isAuthenticated() && getUserRole() == 'seller';
+    }
+    
+    // Users collection - Admin only management
+    match /users/{userId} {
+      // Any authenticated user can read users (for display names, etc.)
+      allow read: if isAuthenticated();
+      
+      // Only admin can create, update, delete users
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // Trips collection
+    match /trips/{tripId} {
+      // All authenticated users can read trips
+      allow read: if isAuthenticated();
+      
+      // Driver can create trips
+      allow create: if isDriver();
+      
+      // Driver can update own trips, Admin can update any
+      allow update: if isAdmin() || (isDriver() && resource.data.driver_id == request.auth.uid);
+      
+      // Only admin can delete trips
+      allow delete: if isAdmin();
+    }
+    
+    // Invoices collection
+    match /invoices/{invoiceId} {
+      // All authenticated users can read invoices
+      allow read: if isAuthenticated();
+      
+      // Driver can create invoices
+      allow create: if isDriver();
+      
+      // Driver can update own invoices, Admin can update any
+      allow update: if isAdmin() || (isDriver() && resource.data.driver_id == request.auth.uid);
+      
+      // Only admin can delete invoices
+      allow delete: if isAdmin();
+    }
+    
+    // Images collection
+    match /images/{imageId} {
+      // All authenticated users can read images
+      allow read: if isAuthenticated();
+      
+      // Driver can create images
+      allow create: if isDriver();
+      
+      // Only admin can delete images
+      allow delete: if isAdmin();
+    }
+    
+    // Logs collection
+    match /logs/{logId} {
+      // Only admin can read logs
+      allow read: if isAdmin();
+      
+      // Any authenticated user can create logs (for activity tracking)
+      allow create: if isAuthenticated();
+      
+      // No one can update or delete logs (immutable)
+      allow update, delete: if false;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Invoice images (uploaded by drivers)
+    match /invoices/{invoiceId}/{imageFile} {
+      // Any authenticated user can read images
+      allow read: if request.auth != null;
+      
+      // Only drivers can upload images (max 10MB, images only)
+      allow write: if request.auth != null 
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      
+      // Only admin can delete
+      allow delete: if request.auth != null 
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Legacy path for backward compatibility
+    match /delivery-images/{tripId}/{imageFile} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null 
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+      allow delete: if request.auth != null 
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+  }
+}
