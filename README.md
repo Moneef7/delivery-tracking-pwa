@@ -66,6 +66,9 @@ This system digitizes the entire workflow with role-based access, real-time stat
 ### Trips Tracking
 ![Trips Tracking](public/screenshots/trips.png)
 
+### Driver View
+![Driver View](public/screenshots/driver.png)
+
 ---
 
 ## 🚀 Setup & Installation
