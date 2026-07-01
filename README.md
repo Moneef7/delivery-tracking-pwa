@@ -52,14 +52,19 @@ This system digitizes the entire workflow with role-based access, real-time stat
 
 ## 📸 Screenshots
 
-> _Screenshots coming soon — this section will be updated with images of the login page, dashboard, invoice management, and delivery tracking views._
+> *Below are screenshots of the different views in the application, highlighting the user flow from login to delivery tracking.*
 
-<!-- Add your screenshots here:
-![Login Page](./screenshots/login.png)
-![Dashboard](./screenshots/dashboard.png)
-![Invoice Management](./screenshots/invoices.png)
-![Trip Tracking](./screenshots/trips.png)
--->
+### Login Page
+![Login Page](public/screenshots/login.png)
+
+### Admin Dashboard
+![Admin Dashboard](public/screenshots/dashboard.png)
+
+### Invoice Management
+![Invoice Management](public/screenshots/invoices.png)
+
+### Trips Tracking
+![Trips Tracking](public/screenshots/trips.png)
 
 ---
 
@@ -74,8 +79,8 @@ This system digitizes the entire workflow with role-based access, real-time stat
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/delivery-tracking-system.git
-cd delivery-tracking-system
+git clone https://github.com/Moneef7/delivery-tracking-pwa.git
+cd delivery-tracking-pwa
 ```
 
 ### 2. Install dependencies
@@ -152,7 +157,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## 📁 Project Structure
 
 ```
-delivery-tracking/
+delivery-tracking-pwa/
 ├── src/
 │   ├── app/              # Next.js App Router pages
 │   │   ├── dashboard/    # Admin/Seller dashboard
